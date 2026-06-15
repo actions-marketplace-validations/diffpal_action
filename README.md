@@ -68,32 +68,63 @@ jobs:
 
 ## Inputs
 
-| Input | Default | Description |
+Most repositories only need `base`, `head`, `profile`, `feedback`, and `gate`
+from the quickstart. The rest are grouped by the `diffpal review github` flags
+they configure.
+
+### Action Install
+
+| Input | Default | Use |
 | --- | --- | --- |
 | `install` | `true` | Install `@diffpal/diffpal` before review. |
-| `diffpal-version` | `latest` | npm version or dist-tag for `@diffpal/diffpal`. Pin this for reproducible CI. |
-| `diffpal-path` | `diffpal` | Path to an existing DiffPal binary. Custom paths skip automatic installation. |
-| `base` | required | Base revision passed to `diffpal review github`. |
-| `head` | required | Head revision passed to `diffpal review github`. |
-| `config-dir` | empty | Extra config root directory. |
-| `profile` | empty | DiffPal config profile. |
-| `block-on` | `high` | Severity threshold that marks findings as blocking. |
-| `gate` | `false` | Return non-zero when blocking findings exist. |
-| `mode` | empty | Comma-separated GitHub publish modes. |
-| `feedback` | `balanced` | Review feedback shape: `summary`, `balanced`, or `inline`. |
-| `summary-overview` | `true` | Include a semantic change overview in summaries. |
-| `out` | empty | Output findings bundle path. |
-| `repo` | empty | Repository id for deterministic fingerprints. |
-| `review-id` | empty | Review identifier for deterministic outputs. |
-| `review-channel` | `diffpal` | Publishing channel for check runs and summary comments. |
-| `max-files` | empty | Maximum files from diff. |
-| `context-lines` | empty | Context lines to enrich each changed file. |
-| `max-patch-chars` | empty | Maximum context characters per chunk. |
-| `max-files-per-chunk` | empty | Maximum files per context chunk. |
-| `language` | empty | Language for generated review findings. |
-| `review-checks` | empty | Comma-separated checks, such as `security,bugs,performance,best-practices`. |
-| `instructions` | empty | Additional review instructions for local prompt tuning. |
-| `instructions-file` | empty | Path to additional review instructions. |
+| `diffpal-version` | `latest` | npm version or dist-tag. Pin for reproducible CI. |
+| `diffpal-path` | `diffpal` | Existing binary path. Custom paths skip install. |
+
+### Config Selection
+
+| Input | Default | CLI flag |
+| --- | --- | --- |
+| `config-dir` | empty | `--config-dir` |
+| `profile` | empty | `--profile` |
+
+### Review Target
+
+| Input | Default | CLI flag |
+| --- | --- | --- |
+| `base` | required | `--base` |
+| `head` | required | `--head` |
+| `repo` | empty | `--repo` |
+| `review-id` | empty | `--review-id` |
+
+### Publishing and Gate
+
+| Input | Default | CLI flag |
+| --- | --- | --- |
+| `gate` | `false` | `--gate` |
+| `block-on` | `high` | `--block-on` |
+| `mode` | empty | `--mode` |
+| `feedback` | `balanced` | `--feedback` |
+| `summary-overview` | `true` | `--summary-overview` |
+| `review-channel` | `diffpal` | `--review-channel` |
+| `out` | empty | `--out` |
+
+### Review Tuning
+
+| Input | Default | CLI flag |
+| --- | --- | --- |
+| `language` | empty | `--language` |
+| `review-checks` | empty | `--review-checks` |
+| `instructions` | empty | `--instructions` |
+| `instructions-file` | empty | `--instructions-file` |
+
+### Review Limits
+
+| Input | Default | CLI flag |
+| --- | --- | --- |
+| `max-files` | empty | `--max-files` |
+| `context-lines` | empty | `--context-lines` |
+| `max-patch-chars` | empty | `--max-patch-chars` |
+| `max-files-per-chunk` | empty | `--max-files-per-chunk` |
 
 ## Provider Setup
 
