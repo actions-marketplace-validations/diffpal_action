@@ -4,6 +4,17 @@ Run DiffPal pull request review from GitHub Actions. The action installs the Dif
 
 ## Quick Start
 
+First generate and commit a DiffPal config:
+
+```bash
+npx -y @diffpal/diffpal@latest init --wizard --setup codex-api-key --platform github
+```
+
+This creates `.config/diffpal/config.yaml` with a visible `ci` profile. Existing
+files are kept unless you pass `--force`.
+
+Then add the workflow:
+
 ```yaml
 name: diffpal
 
@@ -87,6 +98,15 @@ jobs:
 ## Provider Setup
 
 DiffPal delegates review work to the provider configured in your DiffPal config. Install and authenticate the provider CLI before this action step. The example above uses Codex ACP. Any ACP-compatible CLI can be used when your `.config/diffpal/config.yaml` points to it.
+
+The onboarding wizard supports these setup recipes:
+
+| Setup | Use when |
+| --- | --- |
+| `codex-api-key` | CI authenticates Codex with `OPENAI_API_KEY`. |
+| `codex-subscription` | CI restores local Codex subscription auth. |
+| `copilot-github-token` | CI authenticates Copilot with a fine-grained GitHub token. |
+| `generic-acp` | You already have another ACP-compatible CLI. |
 
 Full setup docs and CI examples live in the main repository: <https://github.com/diffpal/diffpal>.
 
