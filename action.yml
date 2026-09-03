@@ -39,14 +39,10 @@ inputs:
     description: Return non-zero when blocking findings exist.
     required: false
     default: "false"
-  mode:
-    description: Comma-separated GitHub publish modes.
-    required: false
-    default: ""
   feedback:
-    description: Review feedback shape. Use summary, balanced, or inline.
+    description: Review feedback shape passed to diffpal review github. Pin diffpal-version for reproducible behavior across CLI releases.
     required: false
-    default: balanced
+    default: review
   summary-overview:
     description: Include a semantic change overview in review summaries.
     required: false
@@ -64,31 +60,11 @@ inputs:
     required: false
     default: ""
   review-channel:
-    description: GitHub publishing channel for check runs and summary comments.
+    description: GitHub publishing channel for summary comments.
     required: false
     default: diffpal
-  max-files:
-    description: Maximum files from diff.
-    required: false
-    default: ""
-  context-lines:
-    description: Context lines to enrich each changed file.
-    required: false
-    default: ""
-  max-patch-chars:
-    description: Maximum context characters per chunk.
-    required: false
-    default: ""
-  max-files-per-chunk:
-    description: Maximum files per context chunk.
-    required: false
-    default: ""
   language:
     description: Language for generated review findings.
-    required: false
-    default: ""
-  review-checks:
-    description: "Comma-separated checks to run: security, bugs, performance, best-practices."
     required: false
     default: ""
   instructions:
@@ -97,6 +73,10 @@ inputs:
     default: ""
   instructions-file:
     description: Path to additional review instructions.
+    required: false
+    default: ""
+  debug:
+    description: Pass --debug to DiffPal.
     required: false
     default: ""
 runs:
@@ -119,19 +99,14 @@ runs:
         INPUT_PROFILE: ${{ inputs.profile }}
         INPUT_BLOCK_ON: ${{ inputs.block-on }}
         INPUT_GATE: ${{ inputs.gate }}
-        INPUT_MODE: ${{ inputs.mode }}
         INPUT_FEEDBACK: ${{ inputs.feedback }}
         INPUT_SUMMARY_OVERVIEW: ${{ inputs.summary-overview }}
         INPUT_OUT: ${{ inputs.out }}
         INPUT_REPO: ${{ inputs.repo }}
         INPUT_REVIEW_ID: ${{ inputs.review-id }}
         INPUT_REVIEW_CHANNEL: ${{ inputs.review-channel }}
-        INPUT_MAX_FILES: ${{ inputs.max-files }}
-        INPUT_CONTEXT_LINES: ${{ inputs.context-lines }}
-        INPUT_MAX_PATCH_CHARS: ${{ inputs.max-patch-chars }}
-        INPUT_MAX_FILES_PER_CHUNK: ${{ inputs.max-files-per-chunk }}
         INPUT_LANGUAGE: ${{ inputs.language }}
-        INPUT_REVIEW_CHECKS: ${{ inputs.review-checks }}
         INPUT_INSTRUCTIONS: ${{ inputs.instructions }}
         INPUT_INSTRUCTIONS_FILE: ${{ inputs.instructions-file }}
+        INPUT_DEBUG: ${{ inputs.debug }}
       run: ${{ github.action_path }}/scripts/run-diffpal-review.sh

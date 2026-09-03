@@ -1,6 +1,17 @@
 # DiffPal Review GitHub Action
 
-Run DiffPal pull request review from GitHub Actions. The action installs the DiffPal CLI from npm by default, then runs `diffpal review github` with the pull request base and head revisions.
+GitHub Actions wrapper for DiffPal, the open-source, provider-agnostic AI review
+system for pull requests.
+
+The action installs the DiffPal CLI from npm by default, then runs
+`diffpal review github` with the pull request base and head revisions. It gives
+GitHub teams a portable AI review workflow without requiring a hosted DiffPal
+service or per-seat review platform. Bring the provider recipe you want to use;
+the review flow stays the same.
+
+- Main DiffPal CLI repo: <https://github.com/diffpal/diffpal>
+- GitHub Action package: `diffpal/action@v1`
+- CLI package: <https://www.npmjs.com/package/@diffpal/diffpal>
 
 ## Quick Start
 
@@ -34,7 +45,6 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-      checks: write
     steps:
       - uses: actions/checkout@v6
         with:
@@ -60,7 +70,7 @@ jobs:
           head: ${{ github.event.pull_request.head.sha }}
           repo: ${{ github.repository }}
           review-id: github-pr-${{ github.event.pull_request.number }}
-          feedback: balanced
+          feedback: review
           gate: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -86,6 +96,7 @@ they configure.
 | --- | --- | --- |
 | `config-dir` | empty | `--config-dir` |
 | `profile` | empty | `--profile` |
+| `debug` | `false` | `--debug` |
 
 ### Review Target
 
@@ -102,33 +113,28 @@ they configure.
 | --- | --- | --- |
 | `gate` | `false` | `--gate` |
 | `block-on` | `high` | `--block-on` |
-| `mode` | empty | `--mode` |
-| `feedback` | `balanced` | `--feedback` |
+| `feedback` | `review` | `--feedback` |
 | `summary-overview` | `true` | `--summary-overview` |
 | `review-channel` | `diffpal` | `--review-channel` |
 | `out` | empty | `--out` |
+
+The exact `feedback` behavior is owned by the installed DiffPal CLI version.
+Pin `diffpal-version` when you want rollout-safe, reproducible review behavior.
 
 ### Review Tuning
 
 | Input | Default | CLI flag |
 | --- | --- | --- |
 | `language` | empty | `--language` |
-| `review-checks` | empty | `--review-checks` |
 | `instructions` | empty | `--instructions` |
 | `instructions-file` | empty | `--instructions-file` |
 
-### Review Limits
-
-| Input | Default | CLI flag |
-| --- | --- | --- |
-| `max-files` | empty | `--max-files` |
-| `context-lines` | empty | `--context-lines` |
-| `max-patch-chars` | empty | `--max-patch-chars` |
-| `max-files-per-chunk` | empty | `--max-files-per-chunk` |
-
 ## Provider Setup
 
-DiffPal delegates review work to the provider configured in your DiffPal config. Install and authenticate the provider CLI before this action step. The example above uses Codex ACP. Any ACP-compatible CLI can be used when your `.config/diffpal/config.yaml` points to it.
+DiffPal delegates review work to the provider configured in your DiffPal config.
+Install and authenticate the provider CLI before this action step. The example
+above uses Codex ACP. Any ACP-compatible CLI can be used when your
+`.config/diffpal/config.yaml` points to it.
 
 The onboarding wizard supports these setup recipes:
 
@@ -139,7 +145,8 @@ The onboarding wizard supports these setup recipes:
 | `copilot-github-token` | CI authenticates Copilot with a fine-grained GitHub token. |
 | `generic-acp` | You already have another ACP-compatible CLI. |
 
-Full setup docs and CI examples live in the main repository: <https://github.com/diffpal/diffpal>.
+Full setup docs and CI examples live in the main repository:
+<https://github.com/diffpal/diffpal>.
 
 ## Permissions
 
@@ -149,7 +156,7 @@ Use these permissions when publishing PR feedback:
 permissions:
   contents: read
   pull-requests: write
-  checks: write
 ```
 
-Keep provider secrets available only to trusted workflows. For pull requests, use a same-repository guard when secrets are required.
+Keep provider secrets available only to trusted workflows. For pull requests,
+use a same-repository guard when secrets are required.
